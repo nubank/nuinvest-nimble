@@ -80,7 +80,13 @@ public func recordFailure(_ message: String, location: SourceLocation) {
         let line = Int(location.line)
         let location = XCTSourceCodeLocation(filePath: location.file, lineNumber: line)
         let sourceCodeContext = XCTSourceCodeContext(location: location)
-        let issue = XCTIssue(type: .assertionFailure, compactDescription: message, sourceCodeContext: sourceCodeContext)
+        let issue = XCTIssueReference(
+            type: .assertionFailure,
+            compactDescription: message,
+            detailedDescription: nil,
+            sourceCodeContext: sourceCodeContext,
+            associatedError: nil,
+            attachments: [])
         testCase.record(issue)
     } else {
         let msg = """
