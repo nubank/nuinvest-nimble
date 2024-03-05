@@ -80,20 +80,14 @@ public func recordFailure(_ message: String, location: SourceLocation) {
         let line = Int(location.line)
         let location = XCTSourceCodeLocation(filePath: location.file, lineNumber: line)
         let sourceCodeContext = XCTSourceCodeContext(location: location)
-        #if CI
-        // As of Xcode 12.0.1, XCTIssue is unavailable even though it is documented:
-        //   https://developer.apple.com/documentation/xctest/xctissue
-        // When building with `swift build`, it is available. Perhaps the xctest overlay behaves differently between the two.
-        let issue = XCTIssue(type: .assertionFailure, compactDescription: message, sourceCodeContext: sourceCodeContext)
         
-        #else
         let issue = XCTIssueReference(
             type: .assertionFailure,
             compactDescription: message,
             detailedDescription: nil,
             sourceCodeContext: sourceCodeContext,
             associatedError: nil, attachments: [])
-        #endif
+        
         testCase.record(issue)
     } else {
         let msg = """
